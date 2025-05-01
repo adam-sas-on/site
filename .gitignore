@@ -42,6 +42,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# React/node.js etc.
+package-lock.json
+switch_main_js.sh
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
@@ -71,6 +75,31 @@ web_modules/
 
 # Yarn Integrity file
 .yarn-integrity
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
 
 # dotenv environment variable files
 .env
@@ -128,9 +157,36 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# virtualenv
+.venv
+venv/
+ENV/
+
+# autoenv
+.auto-env
+
+# IDE JetBrains
+.idea/
+
+# VSCode
+.vscode/
+
+# environment script to set DB constants
+setenv.sh
+
+# notes and dump files
+.notes
+pgdump_schema.sql
+notes.txt
+script.js
+*.bak.*
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Ignore Apple macOS file with custom attributes
+.DS_Store
