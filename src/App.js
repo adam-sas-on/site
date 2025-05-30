@@ -1,10 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef} from "react";
 import Terminal from "./Components/Terminal";
 
 
 function App(){
-	const [animate, setAnimate] = useState(false);
-	const terminalRef = useRef(null);
+	const terminalHandleRef = useRef(null), sectionRef = useRef(null);
 
 	useEffect(() => {
 		document.title = document.location.host;
@@ -20,49 +19,58 @@ function App(){
 			});
 		}, { threshold: 0.1 });
 
-		document.querySelectorAll(".reveal, .ghost-icon").forEach(el => {
-			observer.observe(el);
-		});
+		if(sectionRef.current)
+			sectionRef.current.querySelectorAll(".reveal, .ghost-icon").forEach(el => {
+				observer.observe(el);
+			});
 
 		return () => {
-			document.querySelectorAll(".reveal, .ghost-icon").forEach(el => {
-				observer.unobserve(el);
-			});
+			//if(sectionRef.current)
+			//	sectionRef.current.querySelectorAll(".reveal, .ghost-icon").forEach(el => {
+			//		observer.unobserve(el);
+			//	});
+			observer.disconnect();
 		};
-	}, []);
+	}, [sectionRef]);
 
 	useEffect(() => {
 		const termObserver = new IntersectionObserver((entries)=>{
 			entries.forEach(entry=> {
-				if(entry.isIntersecting){
-					setAnimate(true);
+				if(entry.isIntersecting && terminalHandleRef.current){
+					terminalHandleRef.current.startTyping();
 					termObserver.unobserve(entry.target);
 				}
 			});
-		}, { threshold: 0.6 });
+		}, { threshold: 0.5 });
 
-		if(terminalRef.current)
-			termObserver.observe(terminalRef.current);
+		document.querySelectorAll(".terminal-section").forEach(el => {
+			termObserver.observe(el);
+		});
 
 		return () => {
-			if(terminalRef.current)
-				termObserver.unobserve(terminalRef.current);
+			termObserver.disconnect();
 		};
-	}, [terminalRef]);
+	}, [terminalHandleRef]);
+
+	const skillList = useMemo(() => {
+		return {
+			skills: ["> Node.js ✔", "> React ✔", "> JavaScript ✔"/*, "> PHP ✔"*/]
+		};
+	}, []);
 
 
 	return (
 		<>
-			<section>
+			<section ref={ sectionRef }>
 				<div className="reveal">
-					<h1>Example</h1>
-					<p>dev version</p>
+					<h2>This domain is reserved for e-mail correspondence.<br />It is not hosting a live website at the moment.</h2>
+					{/* <p>If you received an e-mail from this domain, it came from someone you already know.</p> */}
+					<p>Scroll down to explore the technologies and experience for this site</p>
+					<span>and to see my other skills.</span>
 				</div>
-				<div className="ghost-icon"><img src={ "static/imgs/mail_ico.svg" } style={{width: "1.5em"}} alt={ "" } /></div>
+				<div className="ghost-icon"><img src={ "static/imgs/mail_ico.svg" } style={{width: "1.5em"}} alt={ "Mail ico" } /></div>
 			</section>
-			<div ref={ terminalRef }>
-			{ animate ? <Terminal animate={ true } /> : <section></section> }
-			</div>
+			<Terminal ref={ terminalHandleRef } skills={ skillList.skills } />
 		</>
 	);
 }

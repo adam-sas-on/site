@@ -5,6 +5,7 @@ body {
 	color: #e0e0e0;
 	font-family: 'Segoe UI', sans-serif;
 	overflow-x: hidden;
+	font-size: 18px;
 }
 
 section {
@@ -14,6 +15,8 @@ section {
 	justify-content: center;
 	position: relative;
 	overflow: hidden;
+	padding-left: 1em;
+	padding-right: 1em;
 }
 .reveal {
 	opacity: 0;

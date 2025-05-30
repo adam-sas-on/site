@@ -1,31 +1,42 @@
-import React, { useEffect, useRef } from "react";
-import { typeLine } from "./functions";
+import React, { useState, useEffect, useImperativeHandle, useRef } from "react";
+import { runTerminalAnimation } from "./functions";
 
 
-function Terminal({ animate }){
+/**
+ * 	Component to display box looking like a terminal;
+ *
+ * @param {MutableRefObject} ref - ref to this component;
+ * @param {Array} skills - list of strings to simulate writing line by line;
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function Terminal({ ref, skills=[] }){
+	const [animate, setAnimate] = useState(false);
 	const terminalBox = useRef(null);
 
 	useEffect(() => {
 		if(animate)
-			runTerminalAnimation();
+			runTerminalAnimation(terminalBox.current);
 	}, [animate, terminalBox]);
 
-	const runTerminalAnimation = function(){
-		if(!terminalBox || !terminalBox.current)
-			return;
-		let terminalLines = terminalBox.current.querySelectorAll(".terminal-line");
-		terminalLines.forEach((line, idx)=>{
-			const text = line.getAttribute("data-text");
-			setTimeout(()=>{
-				typeLine(line, text);
-			}, idx*1000);
-		});
-	};
+	useImperativeHandle(ref, ()=>({
+		startTyping: () =>{
+			setAnimate(true);
+		},
+		locRef: terminalBox
+	}), [terminalBox]);
 
 
 	return (
-		<section className="terminal-section">
-			<div ref={ terminalBox } className="terminal-box">
+		<section ref={ terminalBox } className="terminal-section">
+			<div className="terminal-box">
+				<div className="terminal-line" data-text="> Initializing portfolio..."></div>
+				<div className="terminal-line" data-text="> Loading skills..."></div>
+
+				{ skills.map((skill, idx) =>
+					<div key={ idx } className="terminal-line" data-text={ skill }></div>
+				) }
+
 				<div className="terminal-line" data-text="> System ready."></div>
 				<div className="terminal-line" data-text="> "></div>
 				<div className="cursor">█</div>

@@ -14,8 +14,20 @@ export function typeLine(lineEl, text, delay=30){
 	lineEl.style.width = '100%';
 }
 
+/**
+ * 	Runs simulation of typing on child elements with class ".terminal-line";
+ *
+ * @param {HTMLElement} node - parent node of terminal lines;
+ */
 export function runTerminalAnimation(node){
 	if(!node)
 		return;
 
+	let terminalLines = node.querySelectorAll(".terminal-line");
+	terminalLines.forEach((line, idx) => {
+		const text = line.getAttribute("data-text");
+		setTimeout(()=>{
+			typeLine(line, text);
+		}, idx*1000);
+	});
 }
