@@ -178,6 +178,7 @@ setenv.sh
 .notes
 pgdump_schema.sql
 notes.txt
+notes.md
 script.js
 *.bak.*
 
